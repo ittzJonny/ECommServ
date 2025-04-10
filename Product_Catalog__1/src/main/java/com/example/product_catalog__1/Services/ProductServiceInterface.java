@@ -13,7 +13,7 @@ public abstract class  ProductServiceInterface {
 
     public abstract Products updateProduct(Long productId,Products product);
     public abstract Products addProduct(Products product);
-    public abstract List<Products> getAllProducts();
+    public abstract List<Products> getAllProducts() throws DoesNotExistException;
     public abstract Products getProductById(Long productId) throws InvalidIdException;
     public abstract Products getProductByUserRole(Long productId, UUID userId) throws DoesNotExistException;
 

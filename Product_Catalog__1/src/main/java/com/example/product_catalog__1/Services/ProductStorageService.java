@@ -35,9 +35,9 @@ public class ProductStorageService extends ProductServiceInterface{
     }
 
     @Override
-    public List<Products> getAllProducts() {
+    public List<Products> getAllProducts() throws DoesNotExistException{
         List<Products> pList=productRepo.findAll();
-        if (pList.isEmpty()) throw new RuntimeException("No products found");
+        if (pList.isEmpty()) throw new DoesNotExistException("No products found");
 
         return pList;
     }

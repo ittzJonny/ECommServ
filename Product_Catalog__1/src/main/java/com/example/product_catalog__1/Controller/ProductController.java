@@ -27,57 +27,40 @@ public class ProductController{
     private ProductServiceInterface productService;
 
     @GetMapping("/")
-    public ResponseEntity<List<ProductDTO>> getProducts(){
+    public ResponseEntity<List<ProductDTO>> getProducts() throws DoesNotExistException{
 
-        try {
-            MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
+        MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
 
-            List<ProductDTO> ans = new ArrayList<>();
-            List<Products> productsList = productService.getAllProducts();
+        List<ProductDTO> ans = new ArrayList<>();
+        List<Products> productsList = productService.getAllProducts();
 
-            for (Products product : productsList) {
-                ans.add(convertProductToDTO(product));
-            }
-
-            if (ans.isEmpty()) throw new RuntimeException("No products found");
-
-            headers.add("Error Status", "Success");
-            return new ResponseEntity<>(ans, headers, HttpStatus.OK);
+        for (Products product : productsList) {
+            ans.add(convertProductToDTO(product));
         }
-        catch (Exception e) {
-            throw e;
-        }
+
+//        if (ans.isEmpty()) throw new DoesNotExistException("No products found");
+        headers.add("Error Status", "Success");
+        return new ResponseEntity<>(ans, headers, HttpStatus.OK);
     }
 
     @GetMapping("/getProductByRole/{productId}/{userId}")
     public ResponseEntity<ProductDTO> getProductByRole(@PathVariable Long productId, @PathVariable UUID userId) throws DoesNotExistException {
-        try {
-            Products product=productService.getProductByUserRole(productId, userId);
-            return new ResponseEntity<>(convertProductToDTO(product), HttpStatus.OK);
-        }
-        catch (DoesNotExistException dne) {
-
-            throw dne;
-        }
+        Products product=productService.getProductByUserRole(productId, userId);
+        return new ResponseEntity<>(convertProductToDTO(product), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) throws InvalidIdException, DoesNotExistException {
-        try {
-            if (id <= 0) {
-                throw new InvalidIdException("Id should be greater than 0");
-            }
-            Products products = productService.getProductById(id);
-            if (products == null) {
-                throw new InvalidIdException("Product id " + id + " not found");
-            }
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) throws InvalidIdException {
+        if (id <= 0) {
+            throw new InvalidIdException("Id should be greater than 0");
+        }
+        Products products = productService.getProductById(id);
+        if (products == null) {
+            throw new InvalidIdException("Product id " + id + " not found");
+        }
 
 
-            return new ResponseEntity<>(convertProductToDTO(products), HttpStatus.OK);
-        }
-        catch (InvalidIdException e) {
-            throw e;
-        }
+        return new ResponseEntity<>(convertProductToDTO(products), HttpStatus.OK);
 
     }
 
