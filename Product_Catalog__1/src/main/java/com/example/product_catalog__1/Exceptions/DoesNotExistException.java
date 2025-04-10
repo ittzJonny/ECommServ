@@ -1,7 +1,7 @@
 package com.example.product_catalog__1.Exceptions;
 
-public class DoesNotExist extends Exception {
-    public DoesNotExist(String message) {
+public class DoesNotExistException extends Exception {
+    public DoesNotExistException(String message) {
         super(message);
     }
 }

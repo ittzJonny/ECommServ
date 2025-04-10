@@ -2,7 +2,7 @@ package com.example.product_catalog__1.Services;
 
 import com.example.product_catalog__1.DTO.SortParams;
 import com.example.product_catalog__1.DTO.SortType;
-import com.example.product_catalog__1.Exceptions.DoesNotExist;
+import com.example.product_catalog__1.Exceptions.DoesNotExistException;
 import com.example.product_catalog__1.Models.Products;
 import com.example.product_catalog__1.Repos.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class SearchJPAService implements SearchServiceInterface {
     private ProductRepo productRepo;
 
     @Override
-    public Page<Products> searchProducts(String searchTerm, int pageNumber, int pageSize, List<SortParams> sortParams) {
+    public Page<Products> searchProducts(String searchTerm, int pageNumber, int pageSize, List<SortParams> sortParams) throws DoesNotExistException {
 
         searchTerm="%"+String.join("%", searchTerm.split("\\s+"))+"%";
 
@@ -32,7 +32,7 @@ public class SearchJPAService implements SearchServiceInterface {
 
         if (productsList.isEmpty())
         {
-            throw new DoesNotExist("No products found");
+            throw new DoesNotExistException("No products found");
         }
 
         return productsList;

@@ -1,6 +1,7 @@
 package com.example.product_catalog__1.Services;
 
 import com.example.product_catalog__1.DTO.FakeStoreProductDTO;
+import com.example.product_catalog__1.Exceptions.DoesNotExistException;
 import com.example.product_catalog__1.Exceptions.InvalidIdException;
 import com.example.product_catalog__1.Models.Category;
 import com.example.product_catalog__1.Models.Products;
@@ -14,7 +15,7 @@ public abstract class  ProductServiceInterface {
     public abstract Products addProduct(Products product);
     public abstract List<Products> getAllProducts();
     public abstract Products getProductById(Long productId) throws InvalidIdException;
-    public abstract Products getProductByUserRole(Long productId, UUID userId);
+    public abstract Products getProductByUserRole(Long productId, UUID userId) throws DoesNotExistException;
 
     Products convert(FakeStoreProductDTO fakeStoreProductDTO)
     {

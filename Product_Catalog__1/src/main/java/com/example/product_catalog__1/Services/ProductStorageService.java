@@ -1,7 +1,7 @@
 package com.example.product_catalog__1.Services;
 
 import com.example.product_catalog__1.DTO.UserDto;
-import com.example.product_catalog__1.Exceptions.DoesNotExist;
+import com.example.product_catalog__1.Exceptions.DoesNotExistException;
 import com.example.product_catalog__1.Exceptions.InvalidIdException;
 import com.example.product_catalog__1.Models.Products;
 import com.example.product_catalog__1.Repos.ProductRepo;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service("pss")
@@ -46,12 +45,14 @@ public class ProductStorageService extends ProductServiceInterface{
     @Override
     public Products getProductById(Long productId) throws InvalidIdException {
 
-        return productRepo.findProductsById(productId).orElseThrow(()-> new InvalidIdException("Cannot get Product"));
+        return productRepo
+                .findProductsById(productId)
+                .orElseThrow(()-> new InvalidIdException("No Product found with requested id: " + productId));
     }
 
     @Override
-    public Products getProductByUserRole(Long productId, UUID userId) {
-        Products p=productRepo.findProductsById(productId).orElseThrow(()-> new DoesNotExist("Product Does not Exist"));
+    public Products getProductByUserRole(Long productId, UUID userId) throws DoesNotExistException {
+        Products p=productRepo.findProductsById(productId).orElseThrow(()-> new DoesNotExistException("Product Does not Exist"));
 
         UserDto userDTO=restTemplate.getForEntity("http://AuthenticationService/user/{id}", UserDto.class,userId).getBody();
 

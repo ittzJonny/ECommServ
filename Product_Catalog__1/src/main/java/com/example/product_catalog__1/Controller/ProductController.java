@@ -2,6 +2,7 @@ package com.example.product_catalog__1.Controller;
 
 import com.example.product_catalog__1.DTO.CategoryDTO;
 import com.example.product_catalog__1.DTO.ProductDTO;
+import com.example.product_catalog__1.Exceptions.DoesNotExistException;
 import com.example.product_catalog__1.Exceptions.InvalidIdException;
 import com.example.product_catalog__1.Models.Products;
 import com.example.product_catalog__1.Services.ProductServiceInterface;
@@ -49,18 +50,19 @@ public class ProductController{
     }
 
     @GetMapping("/getProductByRole/{productId}/{userId}")
-    public ResponseEntity<ProductDTO> getProductByRole(@PathVariable Long productId, @PathVariable UUID userId){
+    public ResponseEntity<ProductDTO> getProductByRole(@PathVariable Long productId, @PathVariable UUID userId) throws DoesNotExistException {
         try {
             Products product=productService.getProductByUserRole(productId, userId);
             return new ResponseEntity<>(convertProductToDTO(product), HttpStatus.OK);
         }
-        catch (Exception e) {
-            throw e;
+        catch (DoesNotExistException dne) {
+
+            throw dne;
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) throws InvalidIdException {
+    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long id) throws InvalidIdException, DoesNotExistException {
         try {
             if (id <= 0) {
                 throw new InvalidIdException("Id should be greater than 0");

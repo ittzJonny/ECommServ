@@ -1,7 +1,7 @@
 package com.example.product_catalog__1.Services;
 
 import com.example.product_catalog__1.DTO.UserDto;
-import com.example.product_catalog__1.Exceptions.DoesNotExist;
+import com.example.product_catalog__1.Exceptions.DoesNotExistException;
 import com.example.product_catalog__1.Models.Products;
 import com.example.product_catalog__1.Models.State;
 import com.example.product_catalog__1.Repos.ProductRepo;
@@ -58,7 +58,7 @@ class ProductStorageServiceTest {
     }
 
     @Test
-    void getProductByUserRole_ValidProduct_ValidUser_Good() {
+    void getProductByUserRole_ValidProduct_ValidUser_Good() throws DoesNotExistException {
         //Arrange;
         Long productId=1L;
         UUID userId=UUID.randomUUID();
@@ -112,12 +112,12 @@ class ProductStorageServiceTest {
 
 
         //Assert
-        Exception e=assertThrows(DoesNotExist.class,() -> productStorageService.getProductByUserRole(productId,userId));
+        Exception e=assertThrows(DoesNotExistException.class,() -> productStorageService.getProductByUserRole(productId,userId));
         assertEquals("Product Does not Exist", e.getMessage());
     }
 
     @Test
-    void getProductByUserRole_ValidProduct_NullUser_ReturnsNull() {
+    void getProductByUserRole_ValidProduct_NullUser_ReturnsNull() throws DoesNotExistException {
         //Arrange;
         Long productId=1L;
         UUID userId=UUID.randomUUID();
@@ -162,7 +162,7 @@ class ProductStorageServiceTest {
 
 
         //Assert
-        Exception e=assertThrows(DoesNotExist.class,() -> productStorageService.getProductByUserRole(productId,userId));
+        Exception e=assertThrows(DoesNotExistException.class,() -> productStorageService.getProductByUserRole(productId,userId));
         assertEquals("Product Does not Exist", e.getMessage());
 
 

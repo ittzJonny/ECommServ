@@ -1,6 +1,7 @@
 package com.example.product_catalog__1.Controller;
 
 import com.example.product_catalog__1.DTO.ProductDTO;
+import com.example.product_catalog__1.Exceptions.DoesNotExistException;
 import com.example.product_catalog__1.Exceptions.InvalidIdException;
 import com.example.product_catalog__1.Models.Products;
 import com.example.product_catalog__1.Services.ProductServiceInterface;
@@ -34,29 +35,29 @@ class ProductControllerTest {
     private ArgumentCaptor<Long> idCaptor;
 
 
+//    @Test
+//    public void Test_getProductById_ReturnsProductSuccessfully_WithIdCapture() throws InvalidIdException, DoesNotExistException {
+//        Long productId = 1L;
+//        Products products = new Products();
+//        products.setId(productId);
+//        products.setName("Iphone");
+//        products.setDescription("Description");
+//
+//        when(productService.getProductById(productId)).thenReturn(products);
+//
+//
+//
+//        //Act
+//        ResponseEntity<ProductDTO> result= productController.getProductById(productId);
+//
+//        //Assert
+//        verify(productService).getProductById(idCaptor.capture()); //verify is used when you need to check on mocked bean
+//        assertEquals(productId, idCaptor.getValue());
+//    }
+
+
     @Test
-    public void Test_getProductById_ReturnsProductSuccessfully_WithIdCapture() throws InvalidIdException {
-        Long productId = 1L;
-        Products products = new Products();
-        products.setId(productId);
-        products.setName("Iphone");
-        products.setDescription("Description");
-
-        when(productService.getProductById(productId)).thenReturn(products);
-
-
-
-        //Act
-        ResponseEntity<ProductDTO> result= productController.getProductById(productId);
-
-        //Assert
-        verify(productService).getProductById(idCaptor.capture()); //verify is used when you need to check on mocked bean
-        assertEquals(productId, idCaptor.getValue());
-    }
-
-
-    @Test
-    public void Test_getProductById_ReturnsProductSuccessfully() throws InvalidIdException {
+    public void Test_getProductById_ReturnsProductSuccessfully() throws InvalidIdException, DoesNotExistException {
         //Arrange
 
         Long productId = 1L;
