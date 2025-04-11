@@ -56,11 +56,11 @@ public class ProductControllerMVCTest {
 
         List<ProductDTO> list=new ArrayList<>();
         ProductDTO pd1=new ProductDTO();
-        pd1.setId(1L);
+//        pd1.setId(1L);
         pd1.setName("Iphone");
 
         ProductDTO pd2=new ProductDTO();
-        pd2.setId(2L);
+//        pd2.setId(2L);
         pd2.setName("Mac");
 
 
@@ -91,7 +91,7 @@ public class ProductControllerMVCTest {
         when(productService.addProduct(any(Products.class))).thenReturn(p1);
 
         ProductDTO pd1=new ProductDTO();
-        pd1.setId(1L);
+//        pd1.setId(1L);
         pd1.setName("Iphone");
         pd1.setPrice(23.0);
 
@@ -102,10 +102,7 @@ public class ProductControllerMVCTest {
                         )
                         .andExpect(status().isCreated())
                         .andExpect(content().string(objectMapper.writeValueAsString(pd1)))
-                        .andExpect(jsonPath("$.id").value(pd1.getId()))
+//                        .andExpect(jsonPath("$.id").value(pd1.getId()))
                         .andExpect(jsonPath("$.name").value(pd1.getName()));
-
-
-
     }
 }

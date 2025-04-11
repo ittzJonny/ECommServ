@@ -1,5 +1,7 @@
 package com.example.product_catalog__1.Models;
 
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Data;
@@ -15,6 +17,7 @@ import java.util.Date;
 public abstract class BaseModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @CreatedDate
     private Date created_at;

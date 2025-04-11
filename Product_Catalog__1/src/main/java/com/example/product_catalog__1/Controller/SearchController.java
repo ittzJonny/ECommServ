@@ -60,14 +60,14 @@ public class SearchController {
 
     private ProductDTO convertToResponseDTO(Products products) {
         ProductDTO productDTO = new ProductDTO();
-        productDTO.setId(products.getId());
+//        productDTO.setId(products.getId());
         productDTO.setName(products.getName());
         productDTO.setPrice(products.getPrice());
         productDTO.setDescription(products.getDescription());
         productDTO.setImageUrl(products.getImageUrl());
 
         CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setId(products.getCategory().getId());
+//        categoryDTO.setId(products.getCategory().getId());
         categoryDTO.setName(products.getCategory().getName());
         categoryDTO.setDescription(products.getCategory().getDescription());
 

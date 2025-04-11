@@ -1,6 +1,7 @@
 package com.example.product_catalog__1.Models;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
@@ -10,8 +11,9 @@ import lombok.ToString;
 @Getter
 @Setter
 @Entity
-public class Products extends BaseModel {
+public class Products extends BaseModel{
 
+    @Column(unique = true, nullable = false)
     private String name;
     private String description;
     private String imageUrl;
@@ -27,7 +29,7 @@ public class Products extends BaseModel {
                 ", description='" + description + '\'' +
                 ", imageUrl='" + imageUrl + '\'' +
                 ", price=" + price +
-                ", category=" + category.getName()+"("+category.getId()+") " +
+//                ", category=" + category.getName()+"("+category.getId()+") " +
                 '}';
     }
 }
