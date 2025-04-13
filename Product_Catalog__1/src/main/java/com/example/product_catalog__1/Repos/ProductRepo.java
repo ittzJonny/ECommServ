@@ -14,9 +14,12 @@ public interface ProductRepo extends JpaRepository<Products,Long> {
 
     Optional<Products> findProductsById(Long id);
 
+    Optional<Products> findProductsByName(String productName);
+
     Page<Products> findProductsByNameLike(String name, Pageable pageable);
 
     List<Products> findAll();
     void save(Long id);
 
+    Optional<Object> findByName(String name) ;
 }

@@ -1,7 +1,7 @@
 package com.example.product_catalog__1.Controller;
 
 import com.example.product_catalog__1.Services.CategoriesServiceInterface;
-import com.example.product_catalog__1.Services.FakeStoreCategoryService;
+//import com.example.product_catalog__1.Services.FakeStoreCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,5 +1,6 @@
 package com.example.product_catalog__1.Models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
@@ -14,9 +15,10 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 @Entity
 public class Category extends BaseModel{
+
+    @Column(unique=true, nullable=false)
     private String name;
     private String description;
 
@@ -24,4 +26,11 @@ public class Category extends BaseModel{
 //    @Fetch(FetchMode.JOIN)
     private List<Products> products;
 
+    @Override
+    public String toString() {
+        return "Category{" +
+                "name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }

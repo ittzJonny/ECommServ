@@ -3,6 +3,8 @@ package com.example.product_catalog__1.Services;
 import com.example.product_catalog__1.DTO.FakeStoreProductDTO;
 import com.example.product_catalog__1.Exceptions.DoesNotExistException;
 import com.example.product_catalog__1.Exceptions.InvalidIdException;
+import com.example.product_catalog__1.Exceptions.MandatoryFieldException;
+import com.example.product_catalog__1.Exceptions.ResourceAlreadyExists;
 import com.example.product_catalog__1.Models.Category;
 import com.example.product_catalog__1.Models.Products;
 
@@ -11,13 +13,22 @@ import java.util.UUID;
 
 public abstract class  ProductServiceInterface {
 
-    public abstract Products updateProduct(Long productId,Products product);
-    public abstract Products addProduct(Products product);
     public abstract List<Products> getAllProducts() throws DoesNotExistException;
     public abstract Products getProductById(Long productId) throws InvalidIdException;
     public abstract Products getProductByUserRole(Long productId, UUID userId) throws DoesNotExistException;
 
-    Products convert(FakeStoreProductDTO fakeStoreProductDTO)
+    public abstract Products addProduct(Products product) throws ResourceAlreadyExists, MandatoryFieldException;
+
+    public abstract Products replaceProduct(Products newProduct) throws DoesNotExistException, MandatoryFieldException;
+
+
+
+    public abstract Products updatePartialProduct(String productName, Products productToUpdate) throws DoesNotExistException, MandatoryFieldException;
+
+
+
+
+    public Products convert(FakeStoreProductDTO fakeStoreProductDTO)
     {
 
         if (fakeStoreProductDTO == null) return null;
