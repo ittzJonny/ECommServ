@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public abstract class IAuthService {
 
-    public abstract User signUp(String username, String password) throws AlreadyExistsException, DoesNotExistException, JsonProcessingException;
+    public abstract User signUp(String username, String password) throws AlreadyExistsException, JsonProcessingException;
     public abstract Pair<User,String> login(String username, String password) throws MisMatchException, DoesNotExistException;
     public abstract boolean validateToken(String token, UUID userId) throws DoesNotExistException;
 

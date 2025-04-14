@@ -27,40 +27,35 @@ public class AuthController {
     private IAuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<UserDto> signUp(@RequestBody SignupRequestDto signupRequestDto)
+    public ResponseEntity<UserDto> signUp(@RequestBody SignupRequestDto signupRequestDto) throws AlreadyExistsException,JsonProcessingException
     {
-        try {
+//        try {
             User user=authService.signUp(signupRequestDto.getEmail(),signupRequestDto.getPassword());
             return new ResponseEntity<>(convert(user),HttpStatus.CREATED);
 
-        }
-        catch (AlreadyExistsException e) {
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(userExceptionDto(e, UserDto.class), HttpStatus.CONFLICT);
-        }
-        catch (DoesNotExistException | JsonProcessingException e)
-        {
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(userExceptionDto(e, UserDto.class), HttpStatus.BAD_REQUEST);
-        }
+//        }
+//        catch ( JsonProcessingException e)
+//        {
+//            System.out.println(e.getMessage());
+//            return new ResponseEntity<>(userExceptionDto(e, UserDto.class), HttpStatus.BAD_REQUEST);
+//        }
 
     }
 
     @PostMapping("/login")
-    public ResponseEntity<UserDto> login(@RequestBody LoginRequestDto loginRequestDto) throws MisMatchException {
-        try {
-            System.out.println("Controller Password received: "+loginRequestDto.getPassword());
+    public ResponseEntity<UserDto> login(@RequestBody LoginRequestDto loginRequestDto) throws MisMatchException, DoesNotExistException {
+//        try {
             Pair<User,String> userPair=authService.login(loginRequestDto.getEmail(),loginRequestDto.getPassword());
             MultiValueMap<String,String> headers=new LinkedMultiValueMap<>();
             headers.add(HttpHeaders.SET_COOKIE,userPair.getSecond());
             return new ResponseEntity<>(convert(userPair.getFirst()),headers,HttpStatus.OK);
-        }
-        catch (MisMatchException e) {
-            System.out.println(e.getMessage());
-            return new ResponseEntity<>(userExceptionDto(e, UserDto.class), HttpStatus.BAD_REQUEST);
-        } catch (DoesNotExistException e) {
-            return new ResponseEntity<>(userExceptionDto(e, UserDto.class), HttpStatus.BAD_REQUEST);
-        }
+//        }
+//        catch (MisMatchException e) {
+//            System.out.println(e.getMessage());
+//            return new ResponseEntity<>(userExceptionDto(e, UserDto.class), HttpStatus.BAD_REQUEST);
+//        } catch (DoesNotExistException e) {
+//            return new ResponseEntity<>(userExceptionDto(e, UserDto.class), HttpStatus.BAD_REQUEST);
+//        }
 
     }
 

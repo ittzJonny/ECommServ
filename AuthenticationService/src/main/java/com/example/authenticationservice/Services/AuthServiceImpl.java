@@ -56,7 +56,8 @@ public class AuthServiceImpl extends IAuthService{
 
 
     @Override
-    public User signUp(String email, String password) throws AlreadyExistsException, DoesNotExistException, JsonProcessingException {
+    public User signUp(String email, String password) throws AlreadyExistsException, JsonProcessingException {
+
         Optional<User> userOptional=userRepo.findByEmail(email);
         if(userOptional.isPresent()){
             throw new AlreadyExistsException("User Already Exists");
@@ -115,7 +116,7 @@ public class AuthServiceImpl extends IAuthService{
 
         HashMap<String,Object> payload=new HashMap<>();
 
-        Long currTime=System.currentTimeMillis();
+        long currTime=System.currentTimeMillis();
 
         payload.put("Issue Time",currTime);
         payload.put("Exp Time",currTime+100000);
@@ -132,12 +133,10 @@ public class AuthServiceImpl extends IAuthService{
         session.setToken(token);
         session.setUser(user);
         session.setStatus(Status.ACTIVE);
-        session=sessionRepo.save(session);
+        sessionRepo.save(session);
 
 
-        Pair<User,String> pair= Pair.of(userOptional.get(),token);
-
-        return pair;
+        return Pair.of(userOptional.get(),token);
 
     }
 
