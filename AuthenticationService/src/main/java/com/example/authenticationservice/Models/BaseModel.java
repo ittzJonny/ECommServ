@@ -12,11 +12,12 @@ public abstract class BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
+//    @Column(columnDefinition = "VARCHAR(36)")
     private UUID id;
     private Date createdAt;
     private Date modifiedAt;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private SessionStatus status;
 
 }

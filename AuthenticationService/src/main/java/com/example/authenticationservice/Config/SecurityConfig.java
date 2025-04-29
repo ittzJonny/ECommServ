@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 public class SecurityConfig {
@@ -32,8 +33,11 @@ public class SecurityConfig {
     @Bean
     public SecretKey secretKey() {
 
+        // here we are creating a random key which is not good practice.
         MacAlgorithm algorithm= Jwts.SIG.HS256;
-        return algorithm.key().build();
-
+        String secreat="mysecretkey";
+        SecretKeySpec key=new SecretKeySpec(secreat.getBytes(),algorithm.toString());
+//        return Jwts.SIG.HS256.key().build();
+        return key;
     }
 }

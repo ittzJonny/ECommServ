@@ -6,6 +6,7 @@ import com.example.authenticationservice.Exceptions.DoesNotExistException;
 import com.example.authenticationservice.Exceptions.MisMatchException;
 import com.example.authenticationservice.Models.User;
 import com.example.authenticationservice.Services.IAuthService;
+import com.example.authenticationservice.Utils.DtoUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -47,7 +48,7 @@ public class AuthController {
 //        try {
             Pair<User,String> userPair=authService.login(loginRequestDto.getEmail(),loginRequestDto.getPassword());
             MultiValueMap<String,String> headers=new LinkedMultiValueMap<>();
-            headers.add(HttpHeaders.SET_COOKIE,userPair.getSecond());
+            headers.add("AUTH-TOKEN",userPair.getSecond());
             return new ResponseEntity<>(convert(userPair.getFirst()),headers,HttpStatus.OK);
 //        }
 //        catch (MisMatchException e) {
@@ -115,15 +116,6 @@ public class AuthController {
     //user to userDTO mapper
     private UserDto convert(User user)
     {
-        if (user==null)
-        {
-            return new UserDto();
-        }
-        UserDto userDto=new UserDto();
-        userDto.setEmail(user.getEmail());
-        userDto.setId(user.getId());
-        userDto.setRolesList(user.getRolesList());
-        userDto.setResponseMessage("Success");
-        return userDto;
+        return DtoUtil.convert(user);
     }
 }

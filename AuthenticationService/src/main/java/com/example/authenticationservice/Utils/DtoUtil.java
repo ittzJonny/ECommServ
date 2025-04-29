@@ -15,7 +15,7 @@ public class DtoUtil {
         UserDto userDto=new UserDto();
         userDto.setEmail(user.getEmail());
         userDto.setId(user.getId());
-        userDto.setRolesList(user.getRolesList());
+        userDto.setRolesList(user.getRolesList().stream().toList());
         userDto.setResponseMessage("Success");
         return userDto;
     }

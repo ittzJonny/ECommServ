@@ -8,6 +8,7 @@ public class FaultResponseDTO extends BaseResponseDTO {
     public FaultResponseDTO(){}
     public FaultResponseDTO(String responseMessage) {
         super.responseMessage = responseMessage;
+        super.responseStatus= BaseResponseStatus.FAILURE;
     }
 
 }

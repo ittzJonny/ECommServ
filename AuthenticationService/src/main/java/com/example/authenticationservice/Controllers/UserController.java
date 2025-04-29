@@ -24,19 +24,14 @@ public class UserController {
     IUserService userService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> getUserById(@PathVariable UUID id) {
+    public ResponseEntity<UserDto> getUserById(@PathVariable String id) {
         try {
-            User user= userService.getUserById(id);
+            UUID userId = UUID.fromString(id);
+            User user= userService.getUserById(userId);
             return new ResponseEntity<>(DtoUtil.convert(user), HttpStatus.OK);
         } catch (DoesNotExistException e) {
             return new ResponseEntity<>(ExceptionUtil.getExceptionResponse(e,UserDto.class), HttpStatus.NOT_FOUND);
         }
     }
-
-
-
-
-
-
 
 }

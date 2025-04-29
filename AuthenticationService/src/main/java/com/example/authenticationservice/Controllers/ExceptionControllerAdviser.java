@@ -5,7 +5,7 @@ import com.example.authenticationservice.DTOs.FaultResponseDTO;
 import com.example.authenticationservice.Exceptions.AlreadyExistsException;
 import com.example.authenticationservice.Exceptions.DoesNotExistException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.thoughtworks.xstream.converters.reflection.MissingFieldException;
+//import com.thoughtworks.xstream.converters.reflection.MissingFieldException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -24,10 +24,10 @@ public class ExceptionControllerAdviser {
         return new ResponseEntity<>(new FaultResponseDTO(exception.getMessage()), HttpStatus.OK);
     }
 
-    @ExceptionHandler(MissingFieldException.class)
-    public ResponseEntity<FaultResponseDTO> handleMissingFieldException(MissingFieldException exception) {
-        return  new ResponseEntity<>(new FaultResponseDTO(exception.getMessage()), HttpStatus.OK);
-    }
+//    @ExceptionHandler(MissingFieldException.class)
+//    public ResponseEntity<FaultResponseDTO> handleMissingFieldException(MissingFieldException exception) {
+//        return  new ResponseEntity<>(new FaultResponseDTO(exception.getMessage()), HttpStatus.OK);
+//    }
 
     @ExceptionHandler(JsonProcessingException.class)
     public ResponseEntity<String> handleJsonProcessingException(JsonProcessingException exception) {

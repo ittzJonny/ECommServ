@@ -6,5 +6,6 @@ import lombok.Data;
 public abstract class BaseResponseDTO {
 
     public String responseMessage;
+    public BaseResponseStatus responseStatus;
 
 }

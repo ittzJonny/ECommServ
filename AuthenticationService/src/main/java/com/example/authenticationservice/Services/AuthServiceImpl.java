@@ -6,7 +6,7 @@ import com.example.authenticationservice.Exceptions.DoesNotExistException;
 import com.example.authenticationservice.Exceptions.MisMatchException;
 import com.example.authenticationservice.Models.Role;
 import com.example.authenticationservice.Models.Session;
-import com.example.authenticationservice.Models.Status;
+import com.example.authenticationservice.Models.SessionStatus;
 import com.example.authenticationservice.Models.User;
 import com.example.authenticationservice.Repos.RoleRepo;
 import com.example.authenticationservice.Repos.SessionRepo;
@@ -25,10 +25,7 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class AuthServiceImpl extends IAuthService{
@@ -68,11 +65,13 @@ public class AuthServiceImpl extends IAuthService{
         user.setPassword(bCryptPasswordEncoder.encode(password));
 
 //        user.setRolesList(List.of(this.getRole(null)));
-
+        System.out.println("User not saved yet==============================================");
         user=userRepo.save(user);
 
-        user.setEmail("mananbansal1600@gmail.com");
-        sendEmail(user.getEmail());
+        System.out.println("User saved ==============================================");
+
+//        user.setEmail("mananbansal1600@gmail.com");
+//        sendEmail(user.getEmail());
 
 
         return user;
@@ -114,25 +113,25 @@ public class AuthServiceImpl extends IAuthService{
 //        MacAlgorithm algo= Jwts.SIG.HS256;
 //        SecretKey secretKey=algo.key().build();
 
-        HashMap<String,Object> payload=new HashMap<>();
+//        HashMap<String,Object> payload=new HashMap<>();
+//
+//        long currTime=System.currentTimeMillis();
+//
+//        payload.put("Issue Time",currTime);
+//        payload.put("Exp Time",currTime+100000);
+//        payload.put("UserId",user.getId());
+//        payload.put("Issuer","Authentication Service Impl");
+//        payload.put("Scope",user.getRolesList());
 
-        long currTime=System.currentTimeMillis();
-
-        payload.put("Issue Time",currTime);
-        payload.put("Exp Time",currTime+100000);
-        payload.put("UserId",user.getId());
-        payload.put("Issuer","Authentication Service Impl");
-        payload.put("Scope",user.getRolesList());
 
 
-
-        String token= Jwts.builder().claims(payload).signWith(secretKey).compact();
-
+//        String token= Jwts.builder().claims(payload).signWith(secretKey).compact();
+        String token= generateJWTToken(user.getId(),user.getRolesList(),user.getEmail());
 
         Session session= new Session();
         session.setToken(token);
         session.setUser(user);
-        session.setStatus(Status.ACTIVE);
+        session.setStatus(SessionStatus.ACTIVE);
         sessionRepo.save(session);
 
 
@@ -144,23 +143,23 @@ public class AuthServiceImpl extends IAuthService{
     public boolean validateToken(String token, UUID userId) throws DoesNotExistException {
         Session session=sessionRepo.findByTokenAndUser_id(token,userId).orElse(null);
 
-        if (session==null || session.getStatus() != Status.ACTIVE) {
+        if (session==null || session.getStatus() != SessionStatus.ACTIVE) {
             return false;
         }
 
-        String dbToken=session.getToken();
+//        String dbToken=session.getToken();
 
         JwtParser parser=Jwts.parser().verifyWith(secretKey).build();
         Claims claims=parser.parseSignedClaims(token).getPayload();
 
-        Long tokenExpirey=claims.get("Exp Time",Long.class);
+        Long tokenExpiry=claims.get("Exp Time",Long.class);
         Long currTime=System.currentTimeMillis();
 
-        System.out.println(tokenExpirey-currTime);
+        System.out.println(tokenExpiry-currTime);
 
-        if (tokenExpirey<currTime){
+        if (tokenExpiry<currTime){
 
-            session.setStatus(Status.INACTIVE);
+            session.setStatus(SessionStatus.INACTIVE);
             sessionRepo.save(session);
             return false;
         }
@@ -170,6 +169,21 @@ public class AuthServiceImpl extends IAuthService{
     }
 
 
+    private String generateJWTToken(UUID userId, Set<Role> roles, String email)
+    {
+        HashMap<String,Object> payload=new HashMap<>();
+
+        long currTime=System.currentTimeMillis();
+
+        payload.put("Issue Time",currTime);
+        payload.put("Exp Time",currTime+100000);
+        payload.put("UserId",userId);
+        payload.put("Issuer","Authentication Service Impl");
+        payload.put("Scope",roles.stream().toList());
+
+        return Jwts.builder().claims(payload).signWith(secretKey).compact();
+
+    }
 
 
     private Role getRole(String roleName) throws DoesNotExistException {
