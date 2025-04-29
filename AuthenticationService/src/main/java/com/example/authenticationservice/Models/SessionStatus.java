@@ -1,5 +1,5 @@
 package com.example.authenticationservice.Models;
 
-public enum Status {
+public enum SessionStatus {
     ACTIVE,INACTIVE
 }
