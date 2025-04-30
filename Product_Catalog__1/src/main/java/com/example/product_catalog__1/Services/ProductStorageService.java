@@ -11,6 +11,7 @@ import com.example.product_catalog__1.Repos.CategoryRepo;
 import com.example.product_catalog__1.Repos.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -23,14 +24,21 @@ import java.util.UUID;
 @Primary
 public class ProductStorageService extends ProductServiceInterface{
 
-    @Autowired
-    ProductRepo productRepo;
+    private ProductRepo productRepo;
+
+    private CategoryRepo categoryRepo;
+
+    private RestTemplate restTemplate;
+
+    private RedisTemplate redisTemplate;
 
     @Autowired
-    CategoryRepo categoryRepo;
-
-    @Autowired
-    RestTemplate restTemplate;
+    public ProductStorageService(ProductRepo productRepo, CategoryRepo categoryRepo, RestTemplate restTemplate, RedisTemplate redisTemplate) {
+        this.productRepo = productRepo;
+        this.categoryRepo = categoryRepo;
+        this.restTemplate = restTemplate;
+        this.redisTemplate = redisTemplate;
+    }
 
     @Override
     public List<Products> getAllProducts() throws DoesNotExistException{
@@ -43,9 +51,22 @@ public class ProductStorageService extends ProductServiceInterface{
     @Override
     public Products getProductById(Long productId) throws InvalidIdException {
 
-        return productRepo
+        // check if product exists in redis
+
+        Products product=(Products) redisTemplate.opsForHash().get("PRODUCTS","PRODUCT_"+productId);
+        if (product!=null)
+        {
+            return product;
+        }
+        product= productRepo
                 .findProductsById(productId)
                 .orElseThrow(()-> new InvalidIdException("No Product found with requested id: " + productId));
+
+
+        //store in redis in case of cache miss
+        redisTemplate.opsForHash().put("PRODUCTS","PRODUCT_"+productId, product);
+
+        return product;
     }
 
     @Override
