@@ -1,5 +1,6 @@
 package com.example.ecarthub.Client;
 
+import com.example.ecarthub.Config.ServicesBaseURLConfig;
 import com.example.ecarthub.DTO.ClientDTO.ProductsDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -11,8 +12,12 @@ public class ProductCategoryEComClient implements ProductCategoryClientAdapter {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Autowired
+    private ServicesBaseURLConfig servicesBaseURLConfig;
+
     public ProductsDTO findProductById(String productId) {
-        String url = "http://localhost:8080/products/" + productId;
+
+        String url = servicesBaseURLConfig.getProductService() + productId;
         return restTemplate.getForEntity(url, ProductsDTO.class).getBody();
     }
 

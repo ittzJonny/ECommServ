@@ -42,6 +42,7 @@ public class CartServiceDBImpl implements CartServiceInterface{
     @Override
     public CartServiceResponseDTO viewCart(String userId, String cartType) {
 
+        //check if usedrId and cartType are valid
         this.getCartValidations(userId, cartType);
         AuthUserGetUserDTO user=authUserClient.getUserById(userId);
 
